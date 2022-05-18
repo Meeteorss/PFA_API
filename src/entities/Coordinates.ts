@@ -19,6 +19,8 @@ export class Geoposition {
 export class Photo {
   @Column()
   url: string;
+  @Column()
+  idx: number;
 }
 
 export class SocialMedia {
@@ -50,16 +52,16 @@ export class Coordinates extends BaseEntity {
   @ObjectIdColumn()
   id: ObjectID;
 
-  @Column()
+  @Column({ default: [] })
   tags: string[];
 
   @Column({ nullable: false })
   gps!: Geoposition;
 
-  @Column()
+  @Column({ default: [] })
   photos?: Photo[];
   //add legend
-  @Column()
+  @Column({ default: [] })
   socials?: SocialMedia[];
 
   @Column()
@@ -68,7 +70,7 @@ export class Coordinates extends BaseEntity {
   @Column()
   address: Address;
 
-  @Column()
+  @Column({ default: [] })
   infos: AdditionalInfos[];
 
   @CreateDateColumn()

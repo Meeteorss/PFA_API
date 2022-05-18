@@ -5,21 +5,23 @@
    "type": "commonjs",
    "main": "index.js",
    "devDependencies": {
-      "ts-node": "10.7.0",
-      "@types/node": "^16.11.10",
-      "typescript": "4.5.2",
       "@types/connect-redis": "^0.0.18",
       "@types/cors": "^2.8.12",
       "@types/express": "^4.17.13",
       "@types/express-session": "^1.17.4",
       "@types/ioredis": "^4.28.10",
+      "@types/node": "^16.11.10",
+      "@types/qrcode": "^1.4.2",
       "@types/uuid": "^8.3.4",
-      "nodemon": "^2.0.15"
+      "nodemon": "^2.0.15",
+      "ts-node": "10.7.0",
+      "typescript": "4.5.2"
    },
    "dependencies": {
-      "typeorm": "0.3.6",
-      "reflect-metadata": "^0.1.13",
-      "mongodb": "^4.5.0",
+      "@aws-sdk/client-s3": "^3.76.0",
+      "@aws-sdk/node-http-handler": "^3.76.0",
+      "@aws-sdk/s3-request-presigner": "^3.76.0",
+      "@aws-sdk/types": "^3.55.0",
       "argon2": "^0.28.5",
       "axios": "^0.26.1",
       "class-validator": "^0.13.2",
@@ -29,7 +31,12 @@
       "express": "^4.17.3",
       "express-session": "^1.17.2",
       "ioredis": "^5.0.4",
+      "mongodb": "^4.5.0",
+      "node-fetch": "^3.2.3",
+      "qrcode": "^1.5.0",
+      "reflect-metadata": "^0.1.13",
       "type": "^2.6.0",
+      "typeorm": "0.3.6",
       "uuid": "^8.3.2"
    },
    "scripts": {

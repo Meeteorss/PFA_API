@@ -3,15 +3,18 @@ import { Coordinates } from "../entities/Coordinates";
 
 import { DataSource } from "typeorm";
 import { User } from "../entities/User";
+
+import { Contact } from "../entities/Contact";
+import { Sharing } from "../entities/Sharing";
 import { SharedCoordinates } from "../entities/SharedCoordinates";
 
 export const AppDataSource = new DataSource({
-  url: "mongodb://localhost:27017",
+  url: process.env.DB_URL,
   type: "mongodb",
-  database: "PFA",
+  database: process.env.DB_DATABASE,
   synchronize: true,
   logging: true,
-  entities: [User, Coordinates, SharedCoordinates],
+  entities: [User, Coordinates, Sharing, SharedCoordinates, Contact],
   migrations: [],
   subscribers: [],
 });

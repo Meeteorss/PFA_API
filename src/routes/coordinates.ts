@@ -3,22 +3,24 @@ import { CreateCoordResponse, Req } from "../types/types";
 import { isAuth } from "../middlewares/isAuth";
 import UserRepository from "../repositories/UserRepository";
 import { ObjectId } from "mongodb";
-import { Coordinates } from "../entities/Coordinates";
+
 import CoordinatesRepository from "../repositories/CoordinatesRepository";
 import { isAuthAndOwner } from "../middlewares/isAuthAndOwner";
+import { formatUser } from "../utils/format/formatUser";
 
 export const coordinatesRouter = express.Router();
 
 coordinatesRouter.post("/", isAuth, async (req: Req, res) => {
-  const user = await UserRepository.findOneBy({
+  const u = await UserRepository.findOneBy({
     where: {
       _id: new ObjectId(req.session.userId?.toString()),
     },
   });
-  const input: Coordinates = { ...req.body.body.inputs, creator: user };
+  const user = formatUser(u!);
+  const input = { ...req.body.body.inputs, creator: user };
   let response: CreateCoordResponse = { coordinates: null, errors: [] };
   //validation
-  // console.log("Input : ", input);
+
   if (!input.gps?.lat || !input.gps?.lng) {
     response.errors = [
       ...response.errors,
@@ -33,11 +35,43 @@ coordinatesRouter.post("/", isAuth, async (req: Req, res) => {
   }
   //....
   //end validation
+
   if (response.errors.length) {
     res.send(response);
   } else {
     response.coordinates = await CoordinatesRepository.save(input);
     res.send(response);
+  }
+});
+
+coordinatesRouter.put("/:id", isAuth, async (req: Req, res) => {
+  const id = new ObjectId(req.params.id.toString());
+  const input = { ...req.body.body.inputs };
+
+  let c = await CoordinatesRepository.findOneBy({
+    where: {
+      _id: id,
+    },
+  });
+  if (c) {
+    c = {
+      ...c,
+      ...input,
+      // socials: [...c.socials, ...input.socials],
+      socials: [
+        ...(c.socials ? c.socials : []),
+        ...(input.socials ? input.socials : []),
+      ],
+      photos: [
+        ...(c.photos ? c.photos : []),
+        ...(input.photos ? input.photos : []),
+      ],
+    };
+    const r = await CoordinatesRepository.save(c!);
+
+    res.send({ coordinates: r });
+  } else {
+    res.send({ error: "Not found" });
   }
 });
 
@@ -68,6 +102,20 @@ coordinatesRouter.delete("/:id", isAuth, async (req: Req, res) => {
       await CoordinatesRepository.remove(c);
       res.send("Deleted succesfully").status(200);
     }
+  }
+});
+
+coordinatesRouter.get("/:id", isAuth, async (req: Req, res) => {
+  const { id } = req.params;
+  const c = await CoordinatesRepository.findOneBy({
+    where: {
+      _id: new ObjectId(id),
+    },
+  });
+  if (!c) {
+    res.send({ error: "Coordinates doesn't exsit" });
+  } else {
+    res.send({ coordinates: c });
   }
 });
 

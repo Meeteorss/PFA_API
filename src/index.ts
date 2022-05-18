@@ -4,15 +4,20 @@ import { AppDataSource } from "./config/data-source";
 import express from "express";
 import bodyParser from "body-parser";
 import {
-  prodRouter,
   userRouter,
   authRouter,
   coordinatesRouter,
+  uploadRouter,
+  ContactRouter,
+  sharedCoordinatesRouter,
 } from "./routes";
 import connectRedis from "connect-redis";
 import session from "express-session";
 import cors from "cors";
 import redis from "./config/redis";
+import { sharingRouter } from "./routes/sharing";
+import { SECRET, ___prod___ } from "./constants";
+
 // import { User } from "./entities/User";
 
 AppDataSource.initialize()
@@ -41,14 +46,14 @@ AppDataSource.initialize()
         }),
         name: "sessionID",
         saveUninitialized: false,
-        secret: process.env.PORT!,
+        secret: SECRET,
         resave: false,
         cookie: {
           maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
           httpOnly: true,
-          secure: false,
+          secure: ___prod___ ? true : false,
           sameSite: "lax",
-          // domain: ___prod___ ? ".test.pfa" : undefined,
+          domain: ___prod___ ? ".test.pfa" : undefined,
         },
       })
     );
@@ -56,9 +61,13 @@ AppDataSource.initialize()
     // const users = await User.find({ where: { username: "Meeteorss" } });
     // await User.remove(users);
     app.use("/users", userRouter);
-    app.use("/prods", prodRouter);
+
     app.use("/auth", authRouter);
     app.use("/coordinates", coordinatesRouter);
+    app.use("/sharedcoordinates", sharedCoordinatesRouter);
+    app.use("/upload", uploadRouter);
+    app.use("/sharing", sharingRouter);
+    app.use("/contacts", ContactRouter);
     const PORT = process.env.PORT || 4000;
     app.listen(PORT, () => {
       console.log(`server started on localhost:${PORT}`);

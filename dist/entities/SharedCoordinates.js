@@ -10,14 +10,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SharedCoordinates = void 0;
-const bson_1 = require("bson");
 const typeorm_1 = require("typeorm");
 const Coordinates_1 = require("./Coordinates");
-class SharedCoordinates extends typeorm_1.BaseEntity {
-}
+let SharedCoordinates = class SharedCoordinates extends typeorm_1.BaseEntity {
+};
 __decorate([
     (0, typeorm_1.ObjectIdColumn)(),
-    __metadata("design:type", bson_1.ObjectID)
+    __metadata("design:type", typeorm_1.ObjectID)
 ], SharedCoordinates.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
@@ -25,8 +24,12 @@ __decorate([
 ], SharedCoordinates.prototype, "coordinates", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
-    __metadata("design:type", Array)
-], SharedCoordinates.prototype, "users", void 0);
+    __metadata("design:type", String)
+], SharedCoordinates.prototype, "userId", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], SharedCoordinates.prototype, "user", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
@@ -35,5 +38,8 @@ __decorate([
     (0, typeorm_1.UpdateDateColumn)(),
     __metadata("design:type", Date)
 ], SharedCoordinates.prototype, "updatedAt", void 0);
+SharedCoordinates = __decorate([
+    (0, typeorm_1.Entity)()
+], SharedCoordinates);
 exports.SharedCoordinates = SharedCoordinates;
 //# sourceMappingURL=SharedCoordinates.js.map

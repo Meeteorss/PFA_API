@@ -9,9 +9,41 @@ const isAuth_1 = require("../middlewares/isAuth");
 const data_source_1 = require("../config/data-source");
 const User_1 = require("../entities/User");
 const UserRepository_1 = __importDefault(require("../repositories/UserRepository"));
+const mongodb_1 = require("mongodb");
+const formatUser_1 = require("../utils/format/formatUser");
 exports.userRouter = express_1.default.Router();
+exports.userRouter.get("/:id", isAuth_1.isAuth, async (req, res) => {
+    try {
+        const user = await UserRepository_1.default.findOneBy(new mongodb_1.ObjectId(req.params.id.toString()));
+        if (user) {
+            res.send({ user: (0, formatUser_1.formatUser)(user) });
+        }
+        else {
+            res.send({ error: "User not found" });
+        }
+    }
+    catch (err) {
+        res.send({ error: err.message });
+    }
+});
+exports.userRouter.get("/username/:username", isAuth_1.isAuth, async (req, res) => {
+    try {
+        const user = await UserRepository_1.default.findOneBy({
+            where: { username: { $regex: req.params.username, $options: "-i" } },
+        });
+        if (user) {
+            res.send({ user: (0, formatUser_1.formatUser)(user) });
+        }
+        else {
+            res.send({ error: "User not found" });
+        }
+    }
+    catch (err) {
+        res.send({ error: err.message });
+    }
+});
 exports.userRouter.get("/", async (req, res) => {
-    const data = await UserRepository_1.default.find({ select: { password: false } });
+    const data = await UserRepository_1.default.find();
     res.send({ users: data });
 });
 exports.userRouter.get("/private", isAuth_1.isAuth, (req, res) => {

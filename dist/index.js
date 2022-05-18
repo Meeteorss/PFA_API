@@ -13,6 +13,8 @@ const connect_redis_1 = __importDefault(require("connect-redis"));
 const express_session_1 = __importDefault(require("express-session"));
 const cors_1 = __importDefault(require("cors"));
 const redis_1 = __importDefault(require("./config/redis"));
+const sharing_1 = require("./routes/sharing");
+const constants_1 = require("./constants");
 data_source_1.AppDataSource.initialize()
     .then(async () => {
     const app = (0, express_1.default)();
@@ -34,19 +36,23 @@ data_source_1.AppDataSource.initialize()
         }),
         name: "sessionID",
         saveUninitialized: false,
-        secret: process.env.PORT,
+        secret: constants_1.SECRET,
         resave: false,
         cookie: {
             maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
             httpOnly: true,
-            secure: false,
+            secure: constants_1.___prod___ ? true : false,
             sameSite: "lax",
+            domain: constants_1.___prod___ ? ".test.pfa" : undefined,
         },
     }));
     app.use("/users", routes_1.userRouter);
-    app.use("/prods", routes_1.prodRouter);
     app.use("/auth", routes_1.authRouter);
     app.use("/coordinates", routes_1.coordinatesRouter);
+    app.use("/sharedcoordinates", routes_1.sharedCoordinatesRouter);
+    app.use("/upload", routes_1.uploadRouter);
+    app.use("/sharing", sharing_1.sharingRouter);
+    app.use("/contacts", routes_1.ContactRouter);
     const PORT = process.env.PORT || 4000;
     app.listen(PORT, () => {
         console.log(`server started on localhost:${PORT}`);

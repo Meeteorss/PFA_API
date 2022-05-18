@@ -1,21 +1,27 @@
-import { ObjectID } from "bson";
 import {
+  Entity,
   BaseEntity,
+  ObjectIdColumn,
+  ObjectID,
   Column,
   CreateDateColumn,
-  ObjectIdColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { Coordinates } from "./Coordinates";
-import { User } from "./User";
 
+@Entity()
 export class SharedCoordinates extends BaseEntity {
   @ObjectIdColumn()
   id: ObjectID;
+
   @Column()
   coordinates: Coordinates;
+
   @Column()
-  users: User[];
+  userId: string;
+  @Column()
+  user: string;
+
   @CreateDateColumn()
   createdAt: Date;
 

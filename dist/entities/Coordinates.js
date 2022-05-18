@@ -29,6 +29,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Photo.prototype, "url", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Number)
+], Photo.prototype, "idx", void 0);
 exports.Photo = Photo;
 class SocialMedia {
 }
@@ -78,7 +82,7 @@ __decorate([
     __metadata("design:type", typeorm_1.ObjectID)
 ], Coordinates.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ default: [] }),
     __metadata("design:type", Array)
 ], Coordinates.prototype, "tags", void 0);
 __decorate([
@@ -86,11 +90,11 @@ __decorate([
     __metadata("design:type", Geoposition)
 ], Coordinates.prototype, "gps", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ default: [] }),
     __metadata("design:type", Array)
 ], Coordinates.prototype, "photos", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ default: [] }),
     __metadata("design:type", Array)
 ], Coordinates.prototype, "socials", void 0);
 __decorate([
@@ -102,7 +106,7 @@ __decorate([
     __metadata("design:type", Address)
 ], Coordinates.prototype, "address", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ default: [] }),
     __metadata("design:type", Array)
 ], Coordinates.prototype, "infos", void 0);
 __decorate([
